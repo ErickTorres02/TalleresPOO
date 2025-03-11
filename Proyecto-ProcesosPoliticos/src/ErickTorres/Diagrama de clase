@@ -1,0 +1,120 @@
+@startuml
+
+class Comuna {
+    - String nombre
+    + String getNombre()
+    + void setNombre(String nombre)
+}
+
+class LocalVotacion {
+    - String nombre
+    - String direccion
+    - Comuna comuna
+    + String getNombre()
+    + void setNombre(String nombre)
+    + String getDireccion()
+    + void setDireccion(String direccion)
+    + Comuna getComuna()
+    + void setComuna(Comuna comuna)
+}
+
+class MesaVotacion {
+    - int numero
+    - String ubicacion
+    - String genero
+    - LocalVotacion local
+    - List<Votante> votantes
+    - List<Candidato> candidatos
+    - Escrutinio escrutinio
+    - List<Apoderado> apoderados
+    - List<VocalMesa> vocales
+    + int getNumero()
+    + void setNumero(int numero)
+    + String getUbicacion()
+    + void setUbicacion(String ubicacion)
+    + String getGenero()
+    + void setGenero(String genero)
+    + LocalVotacion getLocal()
+    + void setLocal(LocalVotacion local)
+    + void agregarVotante(Votante votante)
+    + void agregarCandidato(Candidato candidato)
+    + void agregarApoderado(Apoderado apoderado)
+    + void agregarVocal(VocalMesa vocal)
+    + Escrutinio getEscrutinio()
+}
+
+class Candidato {
+    - String dni
+    - String nombre
+    - String partido
+    - Comuna comuna
+    + String getDni()
+    + void setDni(String dni)
+    + String getNombre()
+    + void setNombre(String nombre)
+    + String getPartido()
+    + void setPartido(String partido)
+    + Comuna getComuna()
+    + void setComuna(Comuna comuna)
+}
+
+class Apoderado {
+    - String rut
+    - String nombre
+    - List<MesaVotacion> mesasAsignadas
+    + String getRut()
+    + void setRut(String rut)
+    + String getNombre()
+    + void setNombre(String nombre)
+    + List<MesaVotacion> getMesasAsignadas()
+    + void agregarMesa(MesaVotacion mesa)
+}
+
+class VocalMesa {
+    - String dni
+    - String nombre
+    - String rol
+    + String getDni()
+    + void setDni(String dni)
+    + String getNombre()
+    + void setNombre(String nombre)
+    + String getRol()
+    + void setRol(String rol)
+}
+
+class Escrutinio {
+    - Map<Candidato, Integer> votosCandidato
+    - int votosBlancos
+    - int votosNulos
+    + void agregarVoto(Candidato candidato)
+    + void agregarVotoBlanco()
+    + void agregarVotoNulo()
+    + Map<Candidato, Integer> getVotosCandidato()
+    + int getVotosBlancos()
+    + int getVotosNulos()
+    + void calcularPorcentajes()
+    + void generarInforme()
+}
+
+class Votante {
+    - String dni
+    - String nombre
+    + String getDni()
+    + void setDni(String dni)
+    + String getNombre()
+    + void setNombre(String nombre)
+}
+
+' Relaciones
+Comuna "1" -- "*" LocalVotacion : Contiene
+LocalVotacion "1" -- "*" MesaVotacion : Contiene
+MesaVotacion "1" -- "*" Votante : Registra
+MesaVotacion "1" -- "*" Candidato : Vota
+MesaVotacion "1" -- "1" Escrutinio : Realiza
+MesaVotacion "1" -- "*" Apoderado : Asignado
+MesaVotacion "1" -- "*" VocalMesa : Asignado
+Candidato "1" -- "*" Escrutinio : RecibeVotos
+Apoderado "1" -- "*" MesaVotacion : Supervisa
+VocalMesa "1" -- "*" MesaVotacion : Coordina
+
+@enduml
